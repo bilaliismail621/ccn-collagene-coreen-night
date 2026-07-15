@@ -21,8 +21,11 @@ export async function POST(req: Request) {
     const amount = session.amount_total ? (session.amount_total / 100).toFixed(2) : "0.00";
 
     if (email) {
+      // Adresse d'envoi temporaire fournie par Resend (fonctionne sans nom de domaine).
+      // Des que vous aurez un nom de domaine, verifiez-le dans Resend > Domains,
+      // puis remplacez "onboarding@resend.dev" par ex. "commandes@votre-domaine.com".
       await resend.emails.send({
-        from: "CCN <commandes@ccn-nuit.com>",
+        from: "CCN <onboarding@resend.dev>",
         to: email,
         subject: "Confirmation de votre commande CCN",
         html: orderConfirmationHtml(session.id, amount),
