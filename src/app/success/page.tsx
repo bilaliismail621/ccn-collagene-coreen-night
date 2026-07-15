@@ -1,11 +1,15 @@
 import { getStripe } from "@/lib/stripe";
 
+type SearchParams = { [key: string]: string | string[] | undefined };
+
 export default async function SuccessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ session_id?: string }>;
+  searchParams: Promise<SearchParams>;
 }) {
-  const { session_id: sessionId } = await searchParams;
+  const params = await searchParams;
+  const sessionId = typeof params.session_id === "string" ? params.session_id : undefined;
+
   let session = null;
   if (sessionId) {
     try {
