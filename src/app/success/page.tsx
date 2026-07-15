@@ -1,15 +1,15 @@
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 
 export default async function SuccessPage({
   searchParams,
 }: {
-  searchParams: { session_id?: string };
+  searchParams: Promise<{ session_id?: string }>;
 }) {
-  const sessionId = searchParams.session_id;
+  const { session_id: sessionId } = await searchParams;
   let session = null;
   if (sessionId) {
     try {
-      session = await stripe.checkout.sessions.retrieve(sessionId);
+      session = await getStripe().checkout.sessions.retrieve(sessionId);
     } catch {
       session = null;
     }
@@ -19,8 +19,7 @@ export default async function SuccessPage({
     <main className="mx-auto max-w-xl px-4 py-20 text-center">
       <h1 className="text-3xl font-bold">Merci pour votre commande !</h1>
       <p className="mt-3 text-neutral-600">
-        Votre commande CCN - Collagène Coréen Night est confirmée. Un email de
-        confirmation vous a été envoyé.
+        Votre commande CCN est confirmée. Un email de confirmation vous a été envoyé.
       </p>
       {session && (
         <div className="mt-8 rounded-2xl border p-6 text-left text-sm">

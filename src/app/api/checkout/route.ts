@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 
 const bodySchema = z.object({ quantity: z.number().int().min(1).max(20).default(1) });
 
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
-  const session = await stripe.checkout.sessions.create({
+  const session = await getStripe().checkout.sessions.create({
     mode: "payment",
     line_items: [{ price: process.env.STRIPE_PRICE_ID!, quantity }],
     allow_promotion_codes: true,

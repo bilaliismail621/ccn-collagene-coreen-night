@@ -1,11 +1,12 @@
 import { headers } from "next/headers";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { resend } from "@/lib/resend";
 import { orderConfirmationHtml } from "@/emails/OrderConfirmation";
 
 export async function POST(req: Request) {
   const body = await req.text();
   const sig = headers().get("stripe-signature")!;
+  const stripe = getStripe();
 
   let event;
   try {
