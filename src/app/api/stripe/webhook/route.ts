@@ -5,7 +5,8 @@ import { orderConfirmationHtml } from "@/emails/OrderConfirmation";
 
 export async function POST(req: Request) {
   const body = await req.text();
-  const sig = headers().get("stripe-signature")!;
+  const headersList = await headers();
+  const sig = headersList.get("stripe-signature")!;
   const stripe = getStripe();
 
   let event;
